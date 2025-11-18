@@ -24,7 +24,7 @@ func main() {
 
 	// Endpoint to GET current csrf token
 	app.Get("/csrf-token", func(c *fiber.Ctx) error {
-		token := c.Locals("csrf").(string)
+		token := middleware.GenerateCSRFToken(c)
 		return c.JSON(fiber.Map{
 			"csrf_token": token,
 		})
