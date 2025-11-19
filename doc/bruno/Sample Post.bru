@@ -1,0 +1,85 @@
+meta {
+  name: Sample Post
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}:{{port}}/submit
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+example {
+  name: Failed Post request
+  description: Post request was called without Token or Token expired
+  
+  request: {
+    url: {{base_url}}:{{port}}/submit
+    method: POST
+    mode: none
+  }
+  
+  response: {
+    headers: {
+      date: Wed, 19 Nov 2025 18:55:30 GMT
+      content-type: application/json
+      content-length: 41
+      vary: Origin
+    }
+  
+    status: {
+      code: 403
+      text: Forbidden
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "error": "CSRF token invalid or missing"
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: Success Post request
+  description: Post request was called with Token
+  
+  request: {
+    url: {{base_url}}:{{port}}/submit
+    method: POST
+    mode: none
+  }
+  
+  response: {
+    headers: {
+      date: Wed, 19 Nov 2025 18:56:17 GMT
+      content-type: application/json
+      content-length: 45
+      vary: Origin, Cookie
+      set-cookie: csrf_=46635726-7475-4d15-b829-3b4a44a0ca8d; expires=Wed, 19 Nov 2025 18:56:23 GMT; path=/; HttpOnly; SameSite=Lax
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "message": "POST success, CSRF token valid!"
+        }
+      '''
+    }
+  }
+}
