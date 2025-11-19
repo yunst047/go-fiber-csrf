@@ -1,0 +1,56 @@
+meta {
+  name: Get CSRF Token
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}:{{port}}/csrf-token
+  body: none
+  auth: inherit
+}
+
+script:post-response {
+  const data = res.getBody();
+  
+  bru.setEnvVar("csrf_token", data.csrf_token);
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+example {
+  name: Success Get Token
+  
+  request: {
+    url: {{base_url}}:{{port}}/csrf-token
+    method: GET
+    mode: none
+  }
+  
+  response: {
+    headers: {
+      date: Wed, 19 Nov 2025 18:53:03 GMT
+      content-type: application/json
+      content-length: 53
+      vary: Origin, Cookie
+      set-cookie: csrf_=f92111eb-1ea4-4f80-9e9d-db3f2d196073; expires=Wed, 19 Nov 2025 18:53:09 GMT; path=/; HttpOnly; SameSite=Lax
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: json
+      content: '''
+        {
+          "csrf_token": "f92111eb-1ea4-4f80-9e9d-db3f2d196073"
+        }
+      '''
+    }
+  }
+}
